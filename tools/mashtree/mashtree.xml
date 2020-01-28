@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<tool id="mashtree" name="mashtree" version="@VERSION@+galaxy0">
+    <description>Create a tree using Mash distances.</description>
+    <requirements>
+        <requirement type="package" version="@VERSION@">mashtree</requirement>
+    </requirements>
+    <command><![CDATA[
+    mashtree
+      --numcpus "\${GALAXY_SLOTS:-1}"
+      --genomesize '${genomesize}'
+      --mindepth '${mindepth}'
+      --outmatrix '${matrix}'
+      --outtree '${tree}'
+      
+    ]]></command>
+
+    <inputs>
+        <conditional name="fastq_input">
+            <param name="fastq_input_selector" type="select" label="Single or Paired-end reads" help="Select between paired and single end data">
+                <option value="paired">Paired</option>
+                <option value="single">Single</option>
+                <option value="paired_collection">Paired Collection</option>
+                <option value="paired_iv">Paired Interleaved</option>
+            </param>
+            <when value="paired">
+                <param name="fastq_input1" type="data" format="fastqsanger,fastqsanger.gz,fasta" label="Select first set of reads" help="Specify dataset with forward reads"/>
+                <param name="fastq_input2" type="data" format="fastqsanger,fastqsanger.gz,fasta" label="Select second set of reads" help="Specify dataset with reverse reads"/>
+            </when>
+            <when value="single">
+                <param name="fastq_input1" type="data" format="fastqsanger,fastqsanger.gz,fasta" label="Select fastq dataset" help="Specify dataset with single reads"/>
+            </when>
+            <when value="paired_collection">
+                <param name="fastq_input1" format="fastqsanger,fastqsanger.gz,fasta" type="data_collection" collection_type="paired" label="Select a paired collection" help="See help section for an explanation of dataset collections"/>
+            </when>
+        </conditional>
+        <param name="genomesize" type="integer" min="1000" value="5000000" max="50000000" />
+        <param name="mindepth" type="integer" min="0" value="5" max="100" />
+        <param name="kmerlength" type="integer" min="4" value="21" max="31" />
+        <param name="sketch-size" type="integer" min="100" value="10000" max="100000" />
+    </inputs>
+
+    <outputs>
+        <data name="tree" format="" label="${tool.name} on ${on_string}: Tree" />
+        <data name="matrix" format="tabular" label="${tool.name} on ${on_string}: Distance matrix" />
+    </outputs>
+
+    <tests>
+
+    </tests>
+    <help><![CDATA[
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

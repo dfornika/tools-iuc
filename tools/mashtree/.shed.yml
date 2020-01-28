@@ -1,0 +1,10 @@
+categories:
+- Sequence Analysis
+description: 'Create a tree using Mash distances.'
+long_description: |
+  Create a tree using Mash distances.
+name: mashtree
+owner: iuc
+remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/mashtree
+homepage_url: https://github.com/lskatz/mashtree
+type: unrestricted
