@@ -1,0 +1,92 @@
+<tool id="confindr" name="ConFindr" version="@VERSION@+galaxy0">
+    <description>
+        Intra-species bacterial contamination detection
+    </description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_command" />
+
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir input &&
+        mkdir databases &&
+        #if str( $reads_input.reads_input_selector ) == "paired"
+          ln -s '$reads_input.reads_1' 'input/reads_R1.fastq' &&
+          ln -s '$reads_input.reads_2' 'input/reads_R2.fastq' &&
+        #end if
+        #if str( $reads_input.reads_input_selector ) == "paired_collection"
+          ln -s '$reads_input.reads.forward' 'input/reads_R1.fastq' &&
+          ln -s '$reads_input.reads.reverse' 'input/reads_R2.fastq' &&
+        #end if
+        
+        confindr.py 
+          --threads \${GALAXY_SLOTS:-1}
+          --databases 'databases'
+          --input_directory 'input'
+          --output_name 'output'
+
+    ]]></command>
+
+    <inputs>
+        <conditional name="reads_input">
+            <param name="reads_input_selector" type="select" label="Paired-end reads or paired collection" help="Select between paired and paired collection">
+                <option value="paired">Paired</option>
+                <option value="paired_collection">Paired Collection</option>
+            </param>
+            <when value="paired">
+                <param name="reads_1" type="data" format="@INTYPES@" label="Select first set of reads" help="Specify dataset with forward reads"/>
+                <param name="reads_2" type="data" format="@INTYPES@" label="Select second set of reads" help="Specify dataset with reverse reads"/>
+            </when>
+            <when value="paired_collection">
+                <param name="reads" format="@INTYPES@" type="data_collection" collection_type="paired" label="Select a paired collection" help="See help section for an explanation of dataset collections"/>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data name="report" format="csv" from_work_dir="output/confindr_report.csv" label="${tool.name} on ${on_string} report file" />
+    </outputs>
+
+    <tests>
+        
+
+    </tests>
+
+    <help><![CDATA[
+**What it does**
+
+
+
+**Output**
+
+ConFindr will produce a tab-seperated output file with the following outputs:
+
++--------------------------------+------------------------------------------------+
+|  Column                        | Description                                    |
++================================+================================================+
+| Sample                         |                                                |
++--------------------------------+------------------------------------------------+
+| Genus                          |                                                |
++--------------------------------+------------------------------------------------+
+| ContamStatus                   |                                                |
++--------------------------------+------------------------------------------------+
+| PercentContam                  |                                                |
++--------------------------------+------------------------------------------------+
+| PercentContamStandardDeviation |                                                |
++--------------------------------+------------------------------------------------+
+| BasesExamined                  |                                                |
++--------------------------------+------------------------------------------------+
+| DatabaseDownloadDate           |                                                |
++--------------------------------+------------------------------------------------+
+
+**Example Output**
+
+::
+Sample,Genus,NumContamSNVs,ContamStatus,PercentContam,PercentContamStandardDeviation,BasesExamined,DatabaseDownloadDate
+
+
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>

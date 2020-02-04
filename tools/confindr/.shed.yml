@@ -1,0 +1,10 @@
+categories:
+  - Sequence Analysis
+description: Intra-species bacterial contamination detection
+long_description: |
+  Find bacterial intra-species contamination in raw Illumina data.
+  It does this by looking for multiple alleles of core, single copy genes.
+homepage_url: https://github.com/OLC-Bioinformatics/ConFindr
+name: confindr
+owner: iuc
+remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/confindr/

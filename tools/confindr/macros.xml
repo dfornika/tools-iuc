@@ -1,0 +1,34 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@VERSION@">confindr</requirement>
+            <yield />
+        </requirements>
+    </xml>
+
+    <xml name="version_command">
+        <version_command><![CDATA[confindr.py --version]]></version_command>
+    </xml>
+
+    <token name="@VERSION@">0.7.2</token>
+
+    <token name="@INTYPES">
+        fastq,fastqsanger
+    </token>
+
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">
+                @article{low2019confindr,
+                title={ConFindr: rapid detection of intraspecies and cross-species contamination in bacterial whole-genome sequence data},
+                author={Low, Andrew J and Koziol, Adam G and Manninger, Paul A and Blais, Burton and Carrillo, Catherine D},
+                journal={PeerJ},
+                volume={7},
+                pages={e6995},
+                year={2019},
+                publisher={PeerJ Inc.}
+                }
+            </citation>
+        </citations>
+    </xml>
+</macros>
