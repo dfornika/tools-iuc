@@ -7,8 +7,12 @@
         chewBBACA.py AlleleCall
           --cpu \${GALAXY_SLOTS:-1}
           -i '${assembly}'
-          --ptf '${prodigal_training_file_source.prodigal_training_file.fields.path}'
-          --min_bsr ${min_bsr}
+          #if str( prodigal_training_file_source.prodigal_training_file_source_selector ) == 'tool_data_table'
+            --ptf '${prodigal_training_file_source.prodigal_training_file.fields.path}'
+          #elif str( prodigal_training_file_source.prodigal_training_file_source_selector ) == 'history'
+            --ptf '${prodigal_training_file_source.prodigal_training_file}'
+          #end if
+          --min_bsr '${min_bsr}'
           --st '${size_threshold}'
         ]]>
     </command>
@@ -34,16 +38,33 @@
                        help=""/>
             </when>
         </conditional>
+        <conditional name="schema_source">
+            <param name="schema_source_selector" type="select"
+                   label="Select a schema from your history or use one from a tool data table?">
+                <option value="tool_data_table">Schema from tool data table</option>
+                <option value="history">Schema from history</option>
+            </param>
+            <when value="tool_data_table">
+                <param name="chewbbaca_schemas" type="select" label="chewBBACA Schemas">
+                    <options from_data_table="chewbbaca_schemas">
+                        <validator type="no_options" message="No chewBBACA Schemas Available." />
+                    </options>
+                </param>
+            </when>
+            <when value="history">
+                <param name="schema" type="data_collection" format="fasta" label="chewBBACA Schema" />
+            </when>
+        </conditional>
         <param name="assembly" format="fasta" type="data" label="Genome assembly (fasta)" />
         <param name="min_bsr" type="float" value="0.6" optional="true" label="minimum BSR score" />
         <param name="size_threshold" type="float" min="0.0" value="0.2" max="1.0" optional="true" label="Size threshold" />
     </inputs>
     <outputs>
-        <data format="tabular" name="statistics" label="${tool.name}: on ${on_string}: Statistics" />
-        <data format="tabular" name="contigs_info" label="${tool.name}: on ${on_string}: Contigs Info" />
-        <data format="tabular" name="alleles" label="${tool.name}: on ${on_string}: Alleles"  />
-        <data format="txt" name="log" label="${tool.name}: on ${on_string}: Log" />
-        <data format="tabular" name="repeated_loci" label="${tool.name}: on ${on_string}: Repeated Loci" />
+        <data name="statistics" format="tabular" label="${tool.name}: on ${on_string}: Statistics" />
+        <data name="contigs_info" format="tabular" label="${tool.name}: on ${on_string}: Contigs Info" />
+        <data name="alleles" format="tabular" label="${tool.name}: on ${on_string}: Alleles"  />
+        <data name="log" format="txt" label="${tool.name}: on ${on_string}: Log" />
+        <data name="repeated_loci" format="tabular" label="${tool.name}: on ${on_string}: Repeated Loci" />
     </outputs>
     <tests>
         
