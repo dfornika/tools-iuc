@@ -6,7 +6,7 @@ long_description: |
   whole genome and core genome MultiLocus Sequence Typing (wg/cgMLST) schemas, providing an allele calling
   algorithm based on Blast Score Ratio that can be run in multiprocessor settings and a set of functions
   to visualize and validate allele variation in the loci.
-name: chewbbaca
+name: suite_chewbbaca
 owner: iuc
 remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/chewbbaca
 homepage_url: https://github.com/B-UMMI/chewBBACA
