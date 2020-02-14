@@ -1,0 +1,7 @@
+# Expect three columns, tab separated, as follows:
+# - value (Galaxy records this in the Galaxy DB)
+# - name (Galaxy shows this in the UI)
+# - path to prodigal training file
+#
+# e.g.
+# 408a8d5f-e4a6-4aff-add7-b2aa43302564<tab>E. coli prodigal training file<tab>/path/to/ecoli.ptf
