@@ -1,0 +1,61 @@
+<tool id="ngmerge" name="NGmerge" version="@TOOL_VERSION@">
+    <description>
+        Merge paired-end reads and removing sequencing adapters
+    </description>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ngmerge</requirement>
+    </requirements>
+    <version_command><![CDATA[NGmerge --version]]></version_command>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <command detect_errors="exit_code"><![CDATA[
+        NGmerge
+          #if str( $reads_input.reads_input_selector ) == "paired"
+            -1 '$reads_input.reads_1' -2 '$reads_input.reads_2'
+          #elif str( $reads_assembly.reads_input.reads_input_selector ) == "paired_collection"
+            -1 '$reads_input.reads.forward' -2 '$reads_input.reads.reverse'
+          #end if
+          -l log
+          -f failed
+          -o merged.fastq
+    ]]></command>
+
+    <inputs>
+        <conditional name="reads_input">
+            <param name="reads_input_selector" type="select" label="Single or Paired-end reads" help="Select between paired and single end data">
+                <option value="paired">Paired</option>
+                <option value="paired_collection">Paired Collection</option>
+            </param>
+            <when value="paired">
+                <param name="reads_1" type="data" format="@INTYPES@" label="Select first set of reads" help="Specify dataset with forward reads"/>
+                <param name="reads_2" type="data" format="@INTYPES@" label="Select second set of reads" help="Specify dataset with reverse reads"/>
+            </when>
+            <when value="paired_collection">
+                <param name="reads" format="@INTYPES@" type="data_collection" collection_type="paired" label="Select a paired collection" help="See help section for an explanation of dataset collections"/>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data name="reads_merged" format="fastq" from_work_dir="merged.fastq" />
+        <data name="reads_failed_1" format="fastq" from_work_dir="failed_1.fastq" />
+        <data name="reads_failed_2" format="fastq" from_work_dir="failed_2.fastq" />
+        <data name="log" format="txt" from_work_dir="log.txt" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="reads_1" value="test_reads_1.fastq"/>
+            <param name="reads_2" value="test_reads_2.fastq"/>
+            <output name="reads_merged" file="merged.fastq" />
+        </test>
+    </tests>
+
+    <help><![CDATA[
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1186/s12859-018-2579-2</citation>
+    </citations>
+</tool>

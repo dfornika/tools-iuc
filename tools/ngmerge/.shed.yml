@@ -1,0 +1,19 @@
+categories:
+  - Sequence Analysis
+description: Merging paired-end reads and removing adapters
+long_description: |
+  In the default stitch mode, NGmerge combines paired-end reads that overlap
+  into a single read that spans the full length of the original DNA fragment.
+  The ends of the merged read are defined by the 5' ends of the original reads.
+  Reads that fail the stitching process (due to a lack of sufficient overlap,
+  or excessive sequencing errors) are placed into secondary output files, if
+  the user requires them.
+
+  The alternative adapter-removal mode returns the original reads as pairs,
+  removing the 3' overhangs of those reads whose valid stitched alignment has
+  this characteristic. Reads whose alignments do not have such overhangs
+  (or do not align at all) will also be printed to the output files, unmodified.
+homepage_url: https://github.com/harvardinformatics/NGmerge
+name: ngmerge
+owner: iuc
+remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/ngmerge
