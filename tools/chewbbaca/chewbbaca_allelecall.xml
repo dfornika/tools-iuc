@@ -27,8 +27,8 @@
             <when value="No"/>
             <when value="tool_data_table">
                 <param name="prodigal_training_file" type="select" format="tabular" label="Prodigal Training File">
-                    <options from_data_table="chewbbaca_prodigal_training_files">
-                        <validator type="no_options" message="No chewBBACA prodigal training files are available" />
+                    <options from_data_table="prodigal_training_files">
+                        <validator type="no_options" message="No prodigal training files are available" />
                     </options>
                 </param>
             </when>
