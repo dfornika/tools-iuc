@@ -5,9 +5,11 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         mkdir assemblies &&
+        ln -s
         #for $assembly in $assemblies:
-          ln -s $assembly assemblies &&
+          '${assembly}'
         #end for
+        assemblies &&
         chewBBACA.py CreateSchema
           --cpu \${GALAXY_SLOTS:-1}
           -i assemblies
@@ -25,7 +27,7 @@
         ]]>
     </command>
     <inputs>
-        <param name="assemblies" format="fasta" type="data" multiple="true" label="Assembled genomes (fasta)" />
+        <param name="assemblies" format="fasta" type="data_collection" collection_type="list" label="Assembled genomes (fasta)" />
         <conditional name="prodigal_training_file_source">
             <param name="prodigal_training_file_source_selector" type="select"
                    label="Select a Prodigal training file from your history or use one from a tool data table?">
@@ -36,8 +38,8 @@
             <when value="No"/>
             <when value="tool_data_table">
                 <param name="prodigal_training_file" type="select" format="tabular" label="Prodigal Training File">
-                    <options from_data_table="chewbbaca_prodigal_training_files">
-                        <validator type="no_options" message="No chewBBACA prodigal training files are available" />
+                    <options from_data_table="prodigal_training_files">
+                        <validator type="no_options" message="No prodigal training files are available" />
                     </options>
                 </param>
             </when>
@@ -51,10 +53,35 @@
         <param name="cds" type="data" format="fasta" optional="true" label="Coding sequence file for schema creation (fasta)" />
     </inputs>
     <outputs>
-        <data name="schema_zipped" format="zip" label="${tool.name}: on ${on_string}: Schema (zipped)" from_work_dir="schema.tgz"/>
+        <data name="schema" type="list" format="fasta" label="${tool.name}: on ${on_string}: Schema">
+            <discover_datasets pattern="__name_and_ext__" format="fasta" directory="schema" />
+        </data>
+        <data name="schema_zipped" format="zip" label="${tool.name}: on ${on_string}: Schema (zipped)" from_work_dir="schema.tgz">
+        </data>
     </outputs>
     <tests>
-        
+        <test>
+            <param name="prodigal_training_file_source_selector" value="history" />
+            <param name="prodigal_training_file" value="prodigal_training_files/Streptococcus_agalactiae.trn" />
+            <param name="assemblies">
+                <collection type="list">
+                    <element name="assembly1" value="assemblies/GCA_000007265.1_ASM726v1_genomic_2kbases.fna" />
+                    <element name="assembly2" value="assemblies/GCA_000012705.1_ASM1270v1_genomic_2kbases.fna" />
+                </collection>
+            </param>
+            <output name="schema_zipped" file="test_1_schema.tgz" compare="sim_size" />
+        </test>
+        <test>
+            <param name="prodigal_training_file_source_selector" value="tool_data_table" />
+            <param name="prodigal_training_file" value="Streptococcus_agalactiae" />
+            <param name="assemblies">
+                <collection type="list">
+                    <element name="assembly1" value="assemblies/GCA_000007265.1_ASM726v1_genomic_2kbases.fna" />
+                    <element name="assembly2" value="assemblies/GCA_000012705.1_ASM1270v1_genomic_2kbases.fna" />
+                </collection>
+            </param>
+            <output name="schema_zipped" file="test_1_schema.tgz" compare="sim_size" />
+        </test>
     </tests>
     <help><![CDATA[
     ]]>

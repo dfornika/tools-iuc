@@ -1,0 +1,7 @@
+# Tab separated with three columns:
+# - value (Galaxy records this in the Galaxy DB)
+# - name (Galaxy shows this in the UI)
+# - path (path to prodigal training file)
+#
+Streptococcus_agalactiae	"Streptococcus agalactiae"	${__HERE__}/prodigal_training_files/Streptococcus_agalactiae.trn
+
