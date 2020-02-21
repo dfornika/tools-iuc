@@ -1,0 +1,63 @@
+<tool id="chewbbaca_createschema" name="chewBBACA CreateSchema" version="2.1.0+galaxy0">
+    <description>Create a gene by gene schema based on genomes</description>
+    <requirements>
+        <requirement type="package" version="2.1.0">chewbbaca</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir assemblies &&
+        #for $assembly in $assemblies:
+          ln -s $assembly assemblies &&
+        #end for
+        chewBBACA.py CreateSchema
+          --cpu \${GALAXY_SLOTS:-1}
+          -i assemblies
+          #if str( $prodigal_training_file_source.prodigal_training_file_source_selector ) == 'tool_data_table':
+            --ptf '${prodigal_training_file_source.prodigal_training_file.fields.path}'
+          #elif str( $prodigal_training_file_source.prodigal_training_file_source_selector ) == 'history':
+            --ptf '${prodigal_training_file_source.prodigal_training_file}'
+          #end if
+          #if $cds:
+            --CDS '${cds}'
+          #end if
+          --bsr '${bsr}'
+          -o schema
+          && tar -czf schema.tgz schema
+        ]]>
+    </command>
+    <inputs>
+        <param name="assemblies" format="fasta" type="data" multiple="true" label="Assembled genomes (fasta)" />
+        <conditional name="prodigal_training_file_source">
+            <param name="prodigal_training_file_source_selector" type="select"
+                   label="Select a Prodigal training file from your history or use one from a tool data table?">
+                <option value="No" selected="true">No Prodigal training file</option>
+                <option value="tool_data_table">Prodigal training file from tool data table</option>
+                <option value="history">Prodigal training file from history</option>
+            </param>
+            <when value="No"/>
+            <when value="tool_data_table">
+                <param name="prodigal_training_file" type="select" format="tabular" label="Prodigal Training File">
+                    <options from_data_table="chewbbaca_prodigal_training_files">
+                        <validator type="no_options" message="No chewBBACA prodigal training files are available" />
+                    </options>
+                </param>
+            </when>
+            <when value="history">
+                <param name="prodigal_training_file" type="data" format="binary"
+                       label="Prodigal training file"
+                       help=""/>
+            </when>
+        </conditional>
+        <param name="bsr" type="float" value="0.6" optional="true" label="BSR score" />
+        <param name="cds" type="data" format="fasta" optional="true" label="Coding sequence file for schema creation (fasta)" />
+    </inputs>
+    <outputs>
+        <data name="schema_zipped" format="zip" label="${tool.name}: on ${on_string}: Schema (zipped)" from_work_dir="schema.tgz"/>
+    </outputs>
+    <tests>
+        
+    </tests>
+    <help><![CDATA[
+    ]]>
+    </help>
+   <expand macro="citations"/>
+</tool>

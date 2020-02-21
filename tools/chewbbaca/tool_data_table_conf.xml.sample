@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <tables>
-    <!-- Locations of chewbbaca prodigal training files in the required format -->
-    <table name="chewbbaca_prodigal_training_files" comment_char="#">
+    <!-- Locations of prodigal training files in the required format -->
+    <table name="prodigal_training_files" comment_char="#">
         <columns>value, name, path</columns>
-        <file path="tool-data/chewbbaca_prodigal_training_files.loc" />
+        <file path="tool-data/prodigal_training_files.loc" />
     </table>
 </tables>

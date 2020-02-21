@@ -72,24 +72,5 @@
     <help><![CDATA[
     ]]>
     </help>
-    <citations>
-        <citation type="bibtex">
-            @ARTICLE{andrews_s,
-                author = {Rossi, M and Silva, M and Ribeiro-Gonçalves, B and Silva, DN
-                          and Machado, MP and Oleastro, M and Borges, V and Isidro, J
-                          and Gomes, JP and Vieira, L and Barker, DOR and Llarena, AK
-                          and Halkilahti, J and Jaakkonen, A and Palma, F and Culebro, A
-                          and Kivistö, R and Hänninen, ML and Laukkanen-Ninios, R
-                          and Fredriksson-Ahomaa, M and Salmenlinna, S and Hakkinen, M
-                          and Garaizer, J and Bikandi, J and Hilbert, F and Taboada, EN
-                          and Carriço, JA},
-                keywords = {bioinformatics, ngs, mlst},
-                title = {{INNUENDO whole and core genome MLST databases and schemas
-                          for foodborne pathogens}},
-                url = {https://github.com/TheInnuendoProject/chewBBACA_schemas}
-            }
-        </citation>
-      <citation type="doi">10.1099/mgen.0.000166</citation>
-      <citation type="doi">10.1371/journal.pgen.1007261</citation>
-    </citations>
+    <expand macro="citations"/>
 </tool>
