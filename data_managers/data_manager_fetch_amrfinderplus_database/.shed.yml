@@ -1,0 +1,12 @@
+categories:
+- Data Managers
+description: |
+  Contains a data manager that defines and populates the
+  amrfinderplus_databasestool data table.
+homepage_url: https://github.com/ncbi/amr/wiki/AMRFinderPlus-database
+long_description: |
+    Download the NCBI AmrFinderPlus database and add the path to a data table
+name: data_manager_fetch_amrfinderplus_database
+owner: iuc
+remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/data_managers/data_manager_fetch_amrfinderplus_database/
+type: unrestricted
