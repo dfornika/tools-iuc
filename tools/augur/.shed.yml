@@ -1,0 +1,17 @@
+name: augur
+owner: iuc
+homepage_url: https://github.com/nextstrain/augur
+remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/augur
+description: Pipeline components for real-time phylodynamic analysis
+long_description: |
+  Augur is a bioinformatics toolkit used to track evolution from sequence and serological data.
+categories:
+  - Sequence Analysis
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "augur suite: {{ tool_name }}."
+suite:
+  name: "suite_augur"
+  description: "A suite of Augur tools."
+  type: repository_suite_definition
