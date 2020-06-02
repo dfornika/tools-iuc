@@ -1,7 +1,7 @@
-<tool id="chewbbaca_createschema" name="chewBBACA CreateSchema" version="2.1.0+galaxy0">
+<tool id="chewbbaca_createschema" name="chewBBACA CreateSchema" version="@TOOL_VERSION@+galaxy0">
     <description>Create a gene by gene schema based on genomes</description>
     <requirements>
-        <requirement type="package" version="2.1.0">chewbbaca</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">chewbbaca</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         mkdir assemblies &&
@@ -21,7 +21,7 @@
           #if $cds:
             --CDS '${cds}'
           #end if
-          --bsr '${bsr}'
+          --bsr '${min_bsr}'
           -o schema
           && tar -czf schema.tgz schema
         ]]>
@@ -46,10 +46,10 @@
             <when value="history">
                 <param name="prodigal_training_file" type="data" format="binary"
                        label="Prodigal training file"
-                       help=""/>
+                       help="Prodigal training file"/>
             </when>
         </conditional>
-        <param name="bsr" type="float" value="0.6" optional="true" label="BSR score" />
+        <param name="min_bsr" type="float" value="0.6" optional="true" label="Minimum BLAST Score Ratio (BSR) Similarity" />
         <param name="cds" type="data" format="fasta" optional="true" label="Coding sequence file for schema creation (fasta)" />
     </inputs>
     <outputs>

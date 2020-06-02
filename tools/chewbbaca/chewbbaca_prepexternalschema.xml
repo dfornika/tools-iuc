@@ -4,9 +4,12 @@
         <requirement type="package" version="@TOOL_VERSION@">chewbbaca</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        mkdir input_files &&
+        #for $f in in str( $input_fasta ).split( ','):
+          ln -s ${f} input_files/${f}.fasta
         chewBBACA.py PrepExternalSchema
           --cpu \${GALAXY_SLOTS:-1}
-          -i '${input_files}'
+          -i 'input_files'
           #if str( translation_table ) != "":
             --tbl '${translation_table}'
           #end if
@@ -17,12 +20,15 @@
         ]]>
     </command>
     <inputs>
-        <param name="input_files" format="fasta" type="data" multiple="true" label="Schema files (fasta)" />
+        <param name="input_fasta" format="fasta" type="data" multiple="true" label="Schema files (fasta)" />
         <param name="bsr" type="float" value="0.6" optional="true" label="BSR score" />
         <param name="min_len" type="integer" min="1" value="100" max="100000" optional="true" label="Minimum length" />
     </inputs>
     <outputs>
         <data name="schema_zipped" format="zip" label="${tool.name}: on ${on_string}: Schema (zipped)" from_work_dir="schema.tgz"/>
+        <data name="invalid_alleles" format="txt" label="${tool.name}: on ${on_string}: Invalid Alleles" from_work_dir="schema_invalid_alleles.txt"/>
+        <data name="invalid_alleles" format="txt" label="${tool.name}: on ${on_string}: Invalid Genes" from_work_dir="schema_invalid_genes.txt"/>
+        <data name="summary_stats" format="txt" label="${tool.name}: on ${on_string}: Summary Stats" from_work_dir="schema_summary_stats.txt"/>
     </outputs>
     <tests>
         

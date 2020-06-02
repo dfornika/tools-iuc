@@ -35,7 +35,7 @@
             <when value="history">
                 <param name="prodigal_training_file" type="data" format="binary"
                        label="Prodigal training file"
-                       help=""/>
+                       help="Prodigal training file"/>
             </when>
         </conditional>
         <conditional name="schema_source">
@@ -56,7 +56,7 @@
             </when>
         </conditional>
         <param name="assembly" format="fasta" type="data" label="Genome assembly (fasta)" />
-        <param name="min_bsr" type="float" value="0.6" optional="true" label="minimum BSR score" />
+        <param name="min_bsr" type="float" value="0.6" optional="true" label="Minimum BLAST Score Ratio (BSR) Similarity" />
         <param name="size_threshold" type="float" min="0.0" value="0.2" max="1.0" optional="true" label="Size threshold" />
     </inputs>
     <outputs>
