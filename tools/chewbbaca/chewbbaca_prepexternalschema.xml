@@ -5,8 +5,9 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         mkdir input_files &&
-        #for $f in in str( $input_fasta ).split( ','):
-          ln -s ${f} input_files/${f}.fasta
+        #for $f in in str( $input_fasta ).split(','):
+          #set $filename = os.path.basename( str($f) ).replace(".dat", "")
+          ln -s ${f} input_files/${filename}.fasta
         chewBBACA.py PrepExternalSchema
           --cpu \${GALAXY_SLOTS:-1}
           -i 'input_files'
