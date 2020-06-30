@@ -1,4 +1,4 @@
-<tool id="artic_minion" name="ARTIC minion" version="1.1.3+galaxy0">
+<tool id="artic_minion" name="ARTIC minion" version="1.1.3+galaxy1">
     <description>Build consensus sequence and call variants from amplicon-based nanopore sequence data</description>
     <requirements>
         <requirement type="package" version="1.1.3">artic</requirement>
@@ -17,18 +17,35 @@
           ln -s '${reference_source.reference.fields.path}' 'scheme/name/version/name.reference.fasta' &&
           samtools faidx 'scheme/name/version/name.reference.fasta' &&
         #end if
+        #if str( $variant_caller.variant_caller_selector ) == "nanopolish":
+          mkdir fast5 &&
+          tar -C fast5 -xzf '${variant_caller.fast5_reads}' &&
+        #end if
         artic minion
             --threads \${GALAXY_SLOTS:-1}
             --normalise '${normalise}'
             --read-file '${read_file}'
             --scheme-directory 'scheme'
-            --medaka
+            #if str( $variant_caller.variant_caller_selector ) == "nanopolish":
+              --fast5-directory 'fast5'
+            #else:
+              --medaka
+            #end if
             $bwa
             'name/version'
             '${read_file.element_identifier}'
     ]]></command>
     <inputs>
         <param argument="--read-file" type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz" label="Input Read File"/>
+        <conditional name="variant_caller">
+            <param name="variant_caller_selector" type="select" label="Choose variant caller">
+                <option value="nanopolish">nanopolish</option>
+                <option value="medaka">medaka</option>
+            </param>
+	    <when value="nanopolish">
+                <param name="reads_fast5" type="data" format="fast5.tar.gz" label="Input fast5 or archive of fast5 files"/>
+            </when>
+        </conditional>
         <param argument="--normalise" type="integer" min="1" value="200" max="2000" label="Coverage normalisation depth"/>
         <param argument="--bwa" type="boolean" truevalue="--bwa" falsevalue="" label="Use bwa aligner"/>
         <conditional name="primer_scheme_source">
@@ -39,10 +56,10 @@
             </param>
             <when value="tool_data_table">
                 <param name="primer_scheme_bedfile" type="select" format="tabular" label="Primer Scheme">
-	            <options from_data_table="primer_scheme_bedfiles">
-	                <validator type="no_options" message="No primer scheme .bed files are available" />
+                <options from_data_table="primer_scheme_bedfiles">
+                        <validator type="no_options" message="No primer scheme .bed files are available" />
                     </options>
-	        </param>
+                </param>
             </when>
             <when value="history">
                 <param name="primer_scheme_bedfile" type="data" format="tabular" label="Primer Scheme" />
